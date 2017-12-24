@@ -1,6 +1,6 @@
 # profiler-tool
 
-1、from from [async-profiler](https://github.com/jvm-profiling-tools/async-profiler)
+1、fork from [async-profiler](https://github.com/jvm-profiling-tools/async-profiler)
 2、some polymerized features base on core async-profiler
 
 # polymerized features
