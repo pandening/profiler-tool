@@ -1,11 +1,11 @@
 # profiler-tool
 
-1、fork from [async-profiler](https://github.com/jvm-profiling-tools/async-profiler)
-2、some polymerized features base on core async-profiler
+## fork from [async-profiler](https://github.com/jvm-profiling-tools/async-profiler)
+## some polymerized features base on core async-profiler
 
 # polymerized features
 
-1、check tools feature [FlameGraph] [2017-12-24]
+## check tools feature [FlameGraph] [2017-12-24]
 
 
 # async-profiler
