@@ -34,6 +34,53 @@ check_flame_graph_tool() {
 
 ```
 
+- polymerized command : fg 
+
+```shell
+
+# this method will wait the Polymerized command :"fg"
+# and using the output file to generate a flamegraph.svg file  
+# the params: 
+#       [$1] -> flame graph data file path
+#       [$2] -> pid of profiling jvm
+#       [$3] -> color choose [java etc]
+#       [$4] -> times to profiles
+wait_fg_command_and_generate_flame_graph_file() {
+    FLAME_GRAPH_RAW_DATA_PATH=$1
+    PID=$2
+    COLOR=$3
+    TIMES_TO_PROFILE=$4
+    FLAME_GRAPH_FILE="flamegraph."${PID}".svg"
+    echo "the flame graph raw data file is:$FLAME_GRAPH_RAW_DATA_PATH time to wait:$TIMES_TO_PROFILE"
+
+    if (( TIMES_TO_PROFILE < 1 )); then
+        $TIMES_TO_PROFILE=5 #default time to wait
+    fi
+
+    while (( TIMES_TO_PROFILE-- > 0 )); do
+        check_if_terminated
+        sleep 1 # sleep 1 seconds
+        echo "wait_fg_command_and_generate_flame_graph_file:$TIMES_TO_PROFILE"
+    done    
+
+    if [ ! -f "$FLAME_GRAPH_RAW_DATA_PATH" ]; then
+        echo "The file: $FLAME_GRAPH_RAW_DATA_PATH still not exists"
+    else 
+        file_szie=0
+        file_size=$(wc -c < "$FLAME_GRAPH_RAW_DATA_PATH")
+        if [ $file_size -eq 0 ]; then 
+            echo "Success to get the file: $FLAME_GRAPH_RAW_DATA_PATH, but the file size is 0"
+        else 
+            echo "Success to get the file: $FLAME_GRAPH_RAW_DATA_PATH, start to generate flamegraph.svg"
+            check_flame_graph_tool # check the flame graph tool
+            pwd # for debug
+            ./tools/FlameGraph/flamegraph.pl --colors="$COLOR" "$FLAME_GRAPH_RAW_DATA_PATH" > "$FLAME_GRAPH_FILE"
+            echo "output flamegraph file is:$FLAME_GRAPH_FILE"
+        fi
+    fi
+}
+
+```
 
 # async-profiler
 
