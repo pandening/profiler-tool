@@ -34,7 +34,7 @@ check_flame_graph_tool() {
 
 ```
 
-- polymerized command : fg 
+- polymerized command : fg [2017-12-24]
 
 ```shell
 
