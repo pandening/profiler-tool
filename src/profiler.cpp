@@ -449,6 +449,72 @@ void Profiler::dumpCollapsed(std::ostream& out, Counter counter) {
     }
 }
 
+// dump trace by ladder format
+void Profiler::dumpTraceLadder(std::ostream& out) {
+    MutexLocker ml(_state_lock);
+    if (_state != IDLE) return;
+
+    FrameName fn;
+    u64 unknown = 0;
+
+    for (int i = 0; i < MAX_CALLTRACES; i++) {
+        CallTraceSample& trace = _traces[i];
+        if (trace._samples == 0) continue;
+
+        if (trace._num_frames == 0) {
+            unknown += trace._counter;
+            continue;
+        }
+        int step = 1;
+        for (int j = trace._num_frames - 1; j >= 0; j--) {
+            for (int t = 0; t < step; t ++) {
+                out << " ";
+            }
+            out <<"-";
+            step ++;
+            const char* frame_name = fn.name(_frame_buffer[trace._start_frame + j]);
+            out << frame_name << std::endl;
+        }
+    }
+
+    if (unknown != 0) {
+        out << "[frame_buffer_overflow] " << unknown << "\n";
+    }
+}
+
+//output the top 1 trace
+void Profiler::top1Trace(std::ostream& out, int max_traces) {
+      MutexLocker ml(_state_lock);
+    if (_state != IDLE) return;
+
+    FrameName fn(true);
+    double percent = 100.0 / _total_counter;
+    char buf[1024];
+
+    qsort(_traces, MAX_CALLTRACES, sizeof(CallTraceSample), CallTraceSample::comparator);
+    if (max_traces > MAX_CALLTRACES) max_traces = MAX_CALLTRACES;
+
+    CallTraceSample& trace = _traces[0];
+    if (trace._samples == 0) {
+        return;
+    }
+
+    snprintf(buf, sizeof(buf), "Total: %lld (%.2f%%)  samples: %lld\n",
+    trace._counter, trace._counter * percent, trace._samples);
+    out << buf;
+
+    if (trace._num_frames == 0) {
+        out << "  [ 0] [frame_buffer_overflow]\n";
+    }
+
+    for (int j = 0; j < trace._num_frames; j++) {
+        const char* frame_name = fn.name(_frame_buffer[trace._start_frame + j]);
+        snprintf(buf, sizeof(buf), "  [%2d] %s\n", j, frame_name);
+        out << buf;
+    }
+    out << "\n";
+}
+
 void Profiler::dumpTraces(std::ostream& out, int max_traces) {
     MutexLocker ml(_state_lock);
     if (_state != IDLE) return;
@@ -552,6 +618,8 @@ void Profiler::runInternal(Arguments& args, std::ostream& out) {
             if (args._dump_summary) dumpSummary(out);
             if (args._dump_traces > 0) dumpTraces(out, args._dump_traces);
             if (args._dump_flat > 0) dumpFlat(out, args._dump_flat);
+            if (args._dump_top_trace) top1Trace(out, 65536);
+            if (args._ladder_format) dumpTraceLadder(out);
             break;
         default:
             break;

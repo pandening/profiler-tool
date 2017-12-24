@@ -78,6 +78,8 @@ class Arguments {
     bool _dump_summary;
     int _dump_traces;
     int _dump_flat;
+    bool _dump_top_trace;
+    bool _ladder_format;
 
     Arguments() :
         _action(ACTION_NONE),
@@ -90,11 +92,14 @@ class Arguments {
         _dump_collapsed(false),
         _dump_summary(false),
         _dump_traces(0),
-        _dump_flat(0) {
+        _dump_flat(0),
+        _dump_top_trace(false),
+        _ladder_format(false) {
     }
 
     bool dumpRequested() {
-        return _dump_collapsed || _dump_summary || _dump_traces > 0 || _dump_flat > 0;
+        return _dump_collapsed || _dump_summary || _dump_traces > 0 
+                || _dump_flat > 0 || _dump_top_trace || _ladder_format;
     }
 
     Error parse(const char* args);
