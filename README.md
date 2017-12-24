@@ -7,6 +7,33 @@
 
 - check tools feature [FlameGraph] [2017-12-24]
 
+```shell
+
+# check if we have download the FlameGraph tool
+check_flame_graph_tool() {
+    echo "Checking if the FlameGraph tool is existed..."
+    FLAME_GRAPH_PATH="tools"
+    FLAME_GRAPH_NAME="FlameGraph"
+    FLAME_GRAPH_GIT_CLONE_PATH="https://github.com/brendangregg/FlameGraph"
+    if [ ! -x "$FLAME_GRAPH_PATH" ]; then
+        echo "There is no tools path find, create it and download the tool [FlameGraph]..."
+        mkdir "$FLAME_GRAPH_PATH"
+        cd "$FLAME_GRAPH_PATH"
+        git clone "$FLAME_GRAPH_GIT_CLONE_PATH"
+        cd ../
+    else 
+        cd "$FLAME_GRAPH_PATH"
+        if [ ! -x "$FLAME_GRAPH_NAME" ]; then
+            echo "There is a tools path, but no FlameGraph path find, download it..."
+            git clone "$FLAME_GRAPH_GIT_CLONE_PATH"
+        fi
+        cd ../
+    fi
+    pwd
+}
+
+```
+
 
 # async-profiler
 
