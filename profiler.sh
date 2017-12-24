@@ -18,7 +18,7 @@ usage() {
     echo "  -i interval       sampling interval in nanoseconds"
     echo "  -b bufsize        frame buffer size"
     echo "  -t                profile different threads separately"
-    echo "  -o fmt[,fmt...]   output format: summary|traces|flat|collapsed"
+    echo "  -o fmt[,fmt...]   output format: summary|traces|flat|collapsed|t1t|ladder"
     echo ""
     echo "<pid> is a numeric process ID of the target JVM"
     echo "      or 'jps' keyword to find running JVM automatically using jps tool"

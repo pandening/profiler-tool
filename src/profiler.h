@@ -182,6 +182,8 @@ class Profiler {
     void shutdown(Arguments& args);
     Error start(const char* event, long interval, int frame_buffer_size, bool threads);
     Error stop();
+    void dumpTraceLadder(std::ostream& out);
+    void top1Trace(std::ostream& out, int max_traces);
     void dumpSummary(std::ostream& out);
     void dumpCollapsed(std::ostream& out, Counter counter);
     void dumpTraces(std::ostream& out, int max_traces);

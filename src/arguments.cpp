@@ -81,6 +81,10 @@ Error Arguments::parse(const char* args) {
             _dump_traces = value == NULL ? INT_MAX : atoi(value);
         } else if (strcmp(arg, "flat") == 0) {
             _dump_flat = value == NULL ? INT_MAX : atoi(value);
+        } else if (strcmp(arg, "t1t") == 0) {
+            _dump_top_trace = true; // print the top one trace info
+        } else if (strcmp(arg, "ladder") == 0) {
+            _ladder_format = true; // ladder format show traces
         } else if (strcmp(arg, "interval") == 0) {
             if (value == NULL || (_interval = atol(value)) <= 0) {
                 return Error("interval must be > 0");
