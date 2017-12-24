@@ -1,7 +1,7 @@
 # profiler-tool
 
 - fork from [async-profiler](https://github.com/jvm-profiling-tools/async-profiler)
-- some polymerized features base on core async-profiler
+- add some polymerized features base on core async-profiler
 
 # polymerized features
 
